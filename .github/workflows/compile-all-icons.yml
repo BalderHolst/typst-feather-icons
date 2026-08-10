@@ -1,0 +1,46 @@
+name: Build Typst document
+on: [push, workflow_dispatch]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Typst
+        uses: lvignoli/typst-action@main
+        with:
+          source_file: feather-icon-overview.typ
+
+      - name: Upload PDF file
+        uses: actions/upload-artifact@v4
+        with:
+          name: PDF
+          path: feather-icon-overview.pdf
+
+
+  deploy:
+    needs: 
+      - build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write       # Required
+      id-token: write    # Required
+
+    steps:
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: PDF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: feather-icon-overview.pdf
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
