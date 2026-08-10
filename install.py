@@ -44,7 +44,7 @@ if args.force:
         shutil.rmtree(DST)
 
 if DST.exists():
-    error(f"Dst '{DST}' already exists. Delete it or use the `-f` flag to override.")
+    error(f"Destination '{DST}' already exists. Delete it or use the `-f` flag to override.")
 
 if args.symlink:
     subprocess.run(["ln", "-s", ROOT, DST])
