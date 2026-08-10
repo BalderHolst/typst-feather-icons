@@ -12,16 +12,7 @@
   (name, from_name(name))
 }).to-dict()
 
-// Create tag categories in `icons`
-#for tags in _TAGS.values() {
-  for tag in tags {
-    icons.insert(tag, ().to-dict())
-  }
-}
-
-// Populate tag categories
-#for (name, tags) in _TAGS.pairs() {
-  for tag in tags {
-    icons.at(tag).insert(name, from_name(name))
-  }
-}
+#let inline-icons = icons.pairs().map(it => {
+  let (name, image) = it
+  (name, box(image, height: 1em, baseline: 0.2em))
+}).to-dict()
