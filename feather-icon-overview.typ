@@ -1,4 +1,4 @@
-#import "@local/feather-icons:0.1.0"
+#import "lib.typ" as feather-icons
 
 #show heading: set text(size: 25pt)
 
