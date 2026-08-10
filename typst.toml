@@ -1,0 +1,7 @@
+[package]
+name = "feather-icons"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Balder W. Holst"]
+license = "MIT"
+description = "Feather Icons in Typst"
