@@ -17,6 +17,19 @@ Icon images are accessed with the exposed `icons` variable:
 We have inline icons like this moon #inline-icons.moon which can be accessed with the `inline-icons` variable.
 ```
 
-***Output:***
+*Output:*
 
 ![Output svg](./demo.svg)
+
+## Local Installation
+You can use the included installer to install this package locally on Linux.
+
+```bash
+./install.py
+```
+
+After installation it will be available with:
+
+```typst
+#import "@local/feather-icons:{version}"
+```
