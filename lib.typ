@@ -1,5 +1,8 @@
 #let _TAGS = json("feather-icons/src/tags.json")
 #let _ICON_DIR = "./feather-icons/icons/"
+#let _MANIFEST = json("feather-icons/package.json")
+
+#let version = _MANIFEST.version
 
 #let from_name(name) = {
   image(_ICON_DIR + name + ".svg")
