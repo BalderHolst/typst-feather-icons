@@ -1,9 +1,21 @@
 #import "lib.typ" as feather-icons
 
 #show heading: set text(size: 25pt)
+#set block(spacing: 1em)
 
 = Feather Icons
-VERSION: #feather-icons.version
+#{
+  show text: smallcaps
+  set text(size: 16pt)
+  grid(
+    columns: 2,
+    gutter: 10pt,
+    [Typst Package Version:], toml("./typst.toml").package.version,
+    [Feather Icons Version:], feather-icons.version,
+  )
+}
+
+#line(length: 100%)
 
 #grid(..feather-icons.icons
   .pairs()
