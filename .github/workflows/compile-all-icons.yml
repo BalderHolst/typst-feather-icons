@@ -1,5 +1,13 @@
-name: Build Typst document
-on: [push, workflow_dispatch]
+name: Pages
+
+on:
+  push:
+    branches: [ "main" ]
+    # paths:
+    #   - report/**
+    #   - botbrain/**
+    #   - simple_sim/**
+
 
 permissions:
   contents: write
@@ -14,12 +22,32 @@ jobs:
       - name: Typst
         uses: lvignoli/typst-action@main
         with:
-          source_file: feather-icon-overview.typ
+          source_file: ./feather-icon-overview.typ
 
-      - name: Upload Pages artifact
+      - name: Make `public` directory
+        run: mkdir public ; cp feather-icon-overview.pdf public
+
+      - name: Upload Documentation Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: feather-icon-overview.pdf
+          path: public
 
+  deploy:
+    needs: build
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
