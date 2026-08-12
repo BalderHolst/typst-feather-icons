@@ -17,8 +17,12 @@
     .to-dict()
 }
 
-/// Convert an icon set to an inline icon set
-#let inline(icons) = {
+// Convert an icon set to an inline icon set
+// -> dictionary[str, content]
+#let inline(
+  // Image icon set -> dictionary[str, image]
+  icons
+) = {
   icons
     .pairs()
     .map(it => {
@@ -45,18 +49,58 @@
 }
 
 /// Icon Images
+///
+/// ```example
+/// #stack(dir: ltr, icons.package, icons.code, icons.coffee)
+/// ```
+///
+///-> dictionary[str, image]
 #let icons = _variant(image)
 
 /// Icons for use inside text
+///
+/// ```example
+/// Inline icons can be placed #inline-icons.map-pin directly within text #inline-icons.edit-2.
+/// ```
+/// -> dictionary[str, content]
 #let inline-icons = inline(icons)
 
 /// SVG source for icons
+///
+/// ````example
+/// #raw(svg-icons.clock, lang: "svg")
+///
+/// They can be turned into icons like this:
+/// #image(bytes(svg-icons.clock))
+/// ````
+///
+/// -> dictionary[str, str]
 #let svg-icons = _variant(read)
 
 /// Create an icon set with additional options
+///
+/// ```example
+/// Using the `make-icons` function, we can create a custom icon set with additional tweaks.
+///
+/// #let tweaked-icons = make-icons(
+///   // Specify new icon color
+///   stroke: orange.darken(20%),
+///   // Make the stroke thinner
+///   stroke-width: 1,
+/// )
+/// 
+/// #tweaked-icons.sun
+/// #tweaked-icons.moon
+///
+/// ```
+///
+/// -> dictionary[str, image]
 #let make-icons(
+  /// The color of the icons. This corresponds to the `stroke` field within the SVG source code -> str | color
   stroke: "currentColor",
+  /// The `stroke-width` field within the SVG source code -> str | int
   stroke-width: 2,
+  /// The fill between strokes in the icon -> str | color | none
   fill: none,
 ) = {
   _variant(path => {
@@ -71,10 +115,28 @@
   })
 }
 
-/// Create an *inline* icon set with additional options
+/// Create an _inline_ icon set with additional options
+///
+/// ```example
+/// Using the `make-inline-icons` function, is the same as `make-icons`, but the resulting icons can be used inside text.
+///
+/// #let tweaked-icons = make-inline-icons(
+///   // Specify new icon color
+///   stroke: blue.darken(20%),
+///   // Make the stroke thinner
+///   stroke-width: 1,
+/// )
+/// 
+/// Here we have the #tweaked-icons.sun (sun) and #tweaked-icons.moon (moon)!
+/// ```
+///
+///-> dictionary[str, content]
 #let make-inline-icons(
+  /// The color of the icons. This corresponds to the `stroke` field within the SVG source code -> str | color
   stroke: "currentColor",
+  /// The `stroke-width` field within the SVG source code -> str | int
   stroke-width: 2,
+  /// The fill between strokes in the icon -> str | color | none
   fill: none,
 ) = {
   inline(
