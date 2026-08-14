@@ -121,10 +121,8 @@
 /// Using the `make-inline-icons` function, is the same as `make-icons`, but the resulting icons can be used inside text.
 ///
 /// #let tweaked-icons = make-inline-icons(
-///   // Specify new icon color
-///   stroke: blue.darken(20%),
-///   // Make the stroke thinner
-///   stroke-width: 1,
+///   stroke: blue.darken(20%), // Specify new icon color
+///   stroke-width: 3,          // Make the stroke thicker!
 /// )
 /// 
 /// Here we have the #tweaked-icons.sun (sun) and #tweaked-icons.moon (moon)!

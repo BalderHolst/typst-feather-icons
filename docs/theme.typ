@@ -1,4 +1,5 @@
 #import "@preview/tidy:0.4.3"
+#import "./example-layout.typ": my-layout-example
 
 #let eval-docstring = tidy.utilities.eval-docstring
 #let get-local-name = tidy.utilities.get-local-name
@@ -226,11 +227,6 @@
 
   tidy.show-example.show-example(
     ..args,
-    layout: tidy.show-example.default-layout-example.with(
-      code-block: block.with(radius: 3pt, stroke: .5pt + luma(200)),
-      preview-block: block.with(radius: 3pt, fill: rgb("#e4e5ea")),
-      col-spacing: 5pt,
-      scale-preview: 100%,
-    ),
+    layout: my-layout-example.with(input_file: [Example], output_file: [Output]),
   )
 }
