@@ -1,12 +1,20 @@
-#set document(title: [Feather Icons Package Documentation])
+#let package = toml("./typst.toml").package
+#let original-package = json("./feather-icons/package.json")
 
-#set page(paper: "a4", margin: 15mm)
+#set document(
+  title: [Feather Icons Package Documentation],
+  author: package.authors,
+  keywords: ("Documentation", "API", "Example", package.keywords).flatten(),
+)
+
+#metadata(package) <package-metadata>
+
+#set page(paper: "a4", margin: 18mm)
 
 #import "@preview/tidy:0.4.3"
 #import "./docs/theme.typ"
 #import "./docs/example-layout.typ": my-layout-example
 
-#let package = toml("./typst.toml").package
 
 #import package.entrypoint as feather-icons
 
@@ -19,6 +27,14 @@
 )
 
 #let GRAY = black.lighten(30%)
+
+#show heading.where(level: 1): set text(size: 18pt)
+#set text(size: 12pt)
+
+#show link: it => {
+  show text: underline.with(offset: 2pt)
+  it
+}
 
 #rect(
   {
@@ -40,7 +56,7 @@
     stack(
       dir: ltr,
       [Typst Package Version: #package.version],
-      [Feather Icons Version: #json("./feather-icons/package.json").version],
+      [Feather Icons Version: #original-package.version],
       spacing: 15mm,
     )
   },
@@ -48,17 +64,12 @@
   width: 100%,
   stroke: 1pt + white.darken(30%),
 )
-
 #v(1mm)
 
-#show heading.where(level: 1): set text(size: 18pt)
+This package contains Typst bindings for the open source #link("https://feathericons.com/", [feather icons #feather-icons.inline-icons.globe]). They are vector icons under the MIT license and ready for use in your document!
+
 
 #outline(depth: 3)
-
-// #show heading.where(level: 1): it => {
-//   pagebreak()
-//   it
-// }
 
 = Minimal Example
 #[
@@ -66,24 +77,45 @@
     scope: package-items,
     layout: my-layout-example.with(input_file: "example.typ", output_file: "example.pdf"),
   )
-  ```example
-  <<<#import "@local/feather-icons:0.1.0": icons, inline-icons, make-icons
 
-  <<<#set page(height: 100mm, width: 100mm)
-  #show: it => align(horizon, it)
-  #set text(size: 12pt)
+  #let example-code = {
+    "<<<#import \"@local/feather-icons:" +package.version +"\": icons, inline-icons, make-icons
 
-  Icon images are accessed with the exposed `icons` variable:
-  #stack(dir: ltr, spacing: 7pt, icons.phone, icons.user, icons.github, icons.map-pin)
+Icon images are accessed with the exposed `icons` variable:
+#stack(dir: ltr, spacing: 7pt, icons.phone, icons.user, icons.github, icons.map-pin)
 
-  We have inline icons like this moon #inline-icons.moon which can be accessed with the `inline-icons` variable:
+We have inline icons like this moon #inline-icons.moon which can be accessed with the `inline-icons` variable:
 
-  Icons can be customized using the `make-icons` and `make-inline-icons` functions.
-  #let slim-red-icons = make-icons(stroke: red, stroke-width: 1)
+Icons can be customized using the `make-icons` and `make-inline-icons` functions.
+#let slim-red-icons = make-icons(stroke: red, stroke-width: 1)
 
-  #stack(dir: ltr, spacing: 7pt, slim-red-icons.phone, slim-red-icons.user, slim-red-icons.github, slim-red-icons.map-pin)
-  ```
+#stack(dir: ltr, spacing: 7pt, slim-red-icons.phone, slim-red-icons.user, slim-red-icons.github, slim-red-icons.map-pin)
+"
+  }
+
+  #metadata(example-code) <example-code>
+
+  #raw(
+    example-code,
+    lang: "example",
+  )
+
 ]
+
+= Useful Links
+#table(
+  columns: 2,
+  inset: 5pt,
+  [Package Repository], [#link(package.repository)],
+  [Feather Icons Repository], [#link(original-package.repository.url)],
+  [Feather Icons Website], [#link("https://feathericons.com/")],
+),
+
+= Local Installation
+This package includes an install script for Linux. Simply run it to install this package to the `local` namespace.
+```bash
+python ./install.py
+```
 
 = Typst API (with examples)
 
