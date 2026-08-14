@@ -22,25 +22,25 @@ jobs:
       - name: Typst
         uses: lvignoli/typst-action@main
         with:
-          source_file: ./feather-icon-overview.typ
+          source_file: ./docs.typ
 
       - name: Make `public` directory
         run: |
           mkdir -v public
-          cp -v feather-icon-overview.pdf public
+          cp -v docs.pdf public
           cat << EOF > public/index.html
           <!DOCTYPE html>
           <html lang="en">
           <head>
             <meta charset="UTF-8">
-            <meta http-equiv="refresh" content="0; url=/feather-icon-overview.pdf">
+            <meta http-equiv="refresh" content="0; url=/docs.pdf">
             <title>Redirecting...</title>
             <script>
-              window.location.href = "https://balderholst.github.io/typst-feather-icons/feather-icon-overview.pdf";
+              window.location.href = "https://balderholst.github.io/typst-feather-icons/docs.pdf";
             </script>
           </head>
           <body>
-            <p>If you are not redirected automatically, <a href="https://balderholst.github.io/typst-feather-icons/feather-icon-overview.pdf">click here to open the document</a>.</p>
+            <p>If you are not redirected automatically, <a href="https://balderholst.github.io/typst-feather-icons/docs.pdf">click here to open the document</a>.</p>
           </body>
           </html>
           EOF
