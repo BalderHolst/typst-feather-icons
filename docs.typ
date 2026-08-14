@@ -93,7 +93,9 @@ Icons can be customized using the `make-icons` and `make-inline-icons` functions
 "
   }
 
-  #metadata(example-code) <example-code>
+  #metadata(example-code.split("\n").map(it => {
+    it.replace(regex("^<<<"), "")
+  }).join("\n")) <example-code>
 
   #raw(
     example-code,
