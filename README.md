@@ -18,9 +18,7 @@ Icons can be customized using the `make-icons` and `make-inline-icons` functions
 ```
 
 *Output:*
-
-
-![Output svg](./example.svg)
+![Output svg](https://balderholst.github.io/typst-feather-icons/example.svg)
 
 ## Documentation
 API Documentation and more examples can be found in the [documentation PDF](https://balderholst.github.io/typst-feather-icons/).
@@ -35,5 +33,5 @@ You can use the included installer to install this package locally on Linux.
 After installation it will be available with:
 
 ```typst
-#import "@local/feather-icons:{version}"
+#import "@local/feather-icons:0.1.0"
 ```

@@ -19,7 +19,7 @@ VERSION = MANIFEST['package']['version']
 if 'XDG_CACHE_HOME' in os.environ:
     DATA_DIR = Path(os.environ['XDG_CACHE_HOME'])
 
-PACKAGE_DIR = DATA_DIR / "typst/packages/local" / NAME
+PACKAGE_DIR = DATA_DIR / "typst/packages" / MANIFEST['tools']['install']['namespace'] / NAME
 
 os.makedirs(PACKAGE_DIR, exist_ok=True)
 

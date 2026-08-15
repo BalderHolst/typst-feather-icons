@@ -25,3 +25,6 @@ exclude = [
     "docs/",
     "example.svg",
 ]
+
+[tools.install]
+namespace = "local"

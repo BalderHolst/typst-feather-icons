@@ -10,36 +10,7 @@ This is a simple Typst package for using [Feather Icons](https://feathericons.co
 ```
 
 *Output:*
-
-!(python){
-    import subprocess
-    import os
-
-    def run(cmd):
-        res = subprocess.run(cmd, shell=True, capture_output=True, check=True)
-        if res.stderr != b"": print(res.stderr)
-        return res.stdout
-
-    src = run("typst eval 'query(<example-code>).first().value' --in docs.typ | jq . -r")
-
-    preamble = "\n".join([
-        "#set page(height: 80mm, width: 100mm, margin: 6mm)",
-        "#show: it => align(horizon, it)",
-        "#set text(size: 12pt)",
-    ]) + "\n"
-
-    src = (preamble + src.decode())
-
-    tmppath = "./example.typ"
-
-    with open(tmppath, "w") as f:
-        f.write(src)
-
-    run(f"typst compile --format svg {tmppath} example.svg")
-
-    os.remove(tmppath)
-}
-![Output svg](./example.svg)
+![Output svg](https://balderholst.github.io/typst-feather-icons/example.svg)
 
 ## Documentation
 API Documentation and more examples can be found in the [documentation PDF](https://balderholst.github.io/typst-feather-icons/).
@@ -54,5 +25,9 @@ You can use the included installer to install this package locally on Linux.
 After installation it will be available with:
 
 ```typst
-#import "@local/feather-icons:{version}"
+#import "@!{
+    typst eval 'toml("typst.toml").tools.install.namespace' | jq . -r
+}/feather-icons:!{
+    typst eval 'query(<package-metadata>).first().value' --in docs.typ | jq .version -r
+}"
 ```
