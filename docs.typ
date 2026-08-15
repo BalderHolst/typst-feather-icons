@@ -81,7 +81,7 @@ This package contains Typst bindings for the open source #link("https://featheri
   )
 
   #let example-code = {
-    "<<<#import \"@" + manifest.tools.install.namespace + "/feather-icons:" + package.version +"\": icons, inline-icons, make-icons
+    "<<<#import \"@" + manifest.tool.install.namespace + "/feather-icons:" + package.version +"\": icons, inline-icons, make-icons
 
 Icon images are accessed with the exposed `icons` variable:
 #stack(dir: ltr, spacing: 7pt, icons.phone, icons.user, icons.github, icons.map-pin)

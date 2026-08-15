@@ -26,5 +26,5 @@ exclude = [
     "example.svg",
 ]
 
-[tools.install]
+[tool.install]
 namespace = "local"
