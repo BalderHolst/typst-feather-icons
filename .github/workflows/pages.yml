@@ -3,10 +3,6 @@ name: Pages
 on:
   push:
     branches: [ "main" ]
-    # paths:
-    #   - report/**
-    #   - botbrain/**
-    #   - simple_sim/**
 
 
 permissions:
@@ -19,15 +15,65 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Typst
-        uses: lvignoli/typst-action@main
+      - name: Install Typst
+        uses: typst-community/setup-typst@v5
+
+      - name: Verify Typst installation
+        run: typst --version
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          source_file: ./docs.typ
+          python-version: '3.11'
+
+      - name: Build Docs
+        run: typst compile ./docs.typ
+
+      - name: Build Example Typst File
+        run: |
+          python - << 'EOF'
+          import subprocess
+          import os
+
+          def run(cmd):
+              res = subprocess.run(cmd, shell=True, capture_output=True, check=True)
+              if res.stderr != b"": print(res.stderr)
+              return res.stdout.decode()
+
+          src = run("typst eval 'query(<example-code>).first().value' --in docs.typ | jq . -r")
+
+          lines = []
+
+          for l in src.split("\n"):
+              l = l.replace("@local/feather-icons:0.1.0", "lib.typ")
+              lines.append(l)
+
+          lines.extend([
+              "#set page(height: 80mm, width: 100mm, margin: 6mm)",
+              "#show: it => align(horizon, it)",
+              "#set text(size: 12pt)",
+          ])
+
+          print("--------------------")
+          print(src)
+          print("--------------------")
+
+          src = "\n".join(lines)
+
+          with open( "./example.typ", "w") as f:
+              f.write(src)
+
+          EOF
+
+      - name: Build Example SVG
+        run: typst compile --format svg ./example.typ example.svg
+
 
       - name: Make `public` directory
         run: |
           mkdir -v public
           cp -v docs.pdf public
+          cp -v example.svg public
           cat << EOF > public/index.html
           <!DOCTYPE html>
           <html lang="en">
