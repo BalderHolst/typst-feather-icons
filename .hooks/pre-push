@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+ROOT="$(git rev-parse --show-toplevel)"
+
+cd "$ROOT"
+
+./make-readme.sh
+
+git update-index -q --refresh
+
+git diff-index --quiet HEAD -- || {
+    git status -s
+    echo -e "\nError: You have uncommitted changes. Please commit or stash them before pushing."
+    exit 1
+}
