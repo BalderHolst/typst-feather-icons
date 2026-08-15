@@ -29,45 +29,8 @@ jobs:
       - name: Build Docs
         run: typst compile ./docs.typ
 
-      - name: Build Example Typst File
-        run: |
-          python - << 'EOF'
-          import subprocess
-          import os
-
-          def run(cmd):
-              res = subprocess.run(cmd, shell=True, capture_output=True, check=True)
-              if res.stderr != b"": print(res.stderr)
-              return res.stdout.decode()
-
-          src = run("typst eval 'query(<example-code>).first().value' --in docs.typ | jq . -r")
-
-          lines = []
-
-          for l in src.split("\n"):
-              l = l.replace("@local/feather-icons:0.1.0", "lib.typ")
-              lines.append(l)
-
-          lines.extend([
-              "#set page(height: 80mm, width: 100mm, margin: 6mm)",
-              "#show: it => align(horizon, it)",
-              "#set text(size: 12pt)",
-          ])
-
-          print("--------------------")
-          print(src)
-          print("--------------------")
-
-          src = "\n".join(lines)
-
-          with open( "./example.typ", "w") as f:
-              f.write(src)
-
-          EOF
-
       - name: Build Example SVG
-        run: typst compile --format svg ./example.typ example.svg
-
+        run: python docs/extract-example.py | typst c - example.svg
 
       - name: Make `public` directory
         run: |
