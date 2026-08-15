@@ -21,13 +21,15 @@
 // -> dictionary[str, content]
 #let inline(
   // Image icon set -> dictionary[str, image]
-  icons
+  icons,
+  height: 1em,
+  baseline: 0.2em,
 ) = {
   icons
     .pairs()
     .map(it => {
       let (name, image) = it
-      (name, box(image, height: 1em, baseline: 0.2em))
+      (name, box(image, height: height, baseline: baseline))
     })
     .to-dict()
 }
@@ -136,6 +138,10 @@
   stroke-width: 2,
   /// The fill between strokes in the icon -> str | color | none
   fill: none,
+  /// Height of the icon -> relative
+  height: 1em,
+  /// Baseline offset of the icon -> relative
+  baseline: 0.2em,
 ) = {
   inline(
     make-icons(
@@ -143,5 +149,7 @@
       stroke-width: stroke-width,
       fill: fill,
     ),
+    height: height,
+    baseline: baseline,
   )
 }

@@ -106,7 +106,7 @@ Icons can be customized using the `make-icons` and `make-inline-icons` functions
 
 ]
 
-= Useful Links
+= Relevant Links
 #table(
   columns: 2,
   inset: 5pt,
@@ -143,7 +143,7 @@ python ./install.py
   sort-functions: it => ord(it.name),
 )
 
-= List Icons
+= List of Icons
 
 #columns(4)[
   #set block(spacing: 2pt)
