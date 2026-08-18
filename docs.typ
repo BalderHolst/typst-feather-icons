@@ -1,5 +1,4 @@
 #let manifest = toml("./typst.toml")
-#let original-package = json("./feather-icons/package.json")
 
 #let package = manifest.package
 
@@ -16,6 +15,7 @@
 #import "@preview/tidy:0.4.3"
 #import "./docs/theme.typ"
 #import "./docs/example-layout.typ": my-layout-example
+#import package.entrypoint as feather-icons
 
 
 #import package.entrypoint as feather-icons
@@ -58,7 +58,7 @@
     stack(
       dir: ltr,
       [Typst Package Version: #package.version],
-      [Feather Icons Version: #original-package.version],
+      [Feather Icons Version: #feather-icons.icons-version],
       spacing: 15mm,
     )
   },
@@ -111,7 +111,7 @@ Icons can be customized using the `make-icons` and `make-inline-icons` functions
   columns: 2,
   inset: 5pt,
   [Package Repository], [#link(package.repository)],
-  [Feather Icons Repository], [#link(original-package.repository.url)],
+  [Feather Icons Repository], [#link(feather-icons.icons-repository)],
   [Feather Icons Website], [#link("https://feathericons.com/")],
 ),
 
