@@ -17,10 +17,7 @@ FILES = [
     "LICENSE",
     "lib.typ",
     "typst.toml",
-    "feather-icons/icons",
-    "feather-icons/LICENSE",
-    "feather-icons/package.json",
-    "feather-icons/src/tags.json",
+    "data.typ",
 ]
 
 with open(ROOT / "typst.toml", 'rb') as f:
