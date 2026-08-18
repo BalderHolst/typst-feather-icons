@@ -17,7 +17,7 @@ FILES = [
     "LICENSE",
     "lib.typ",
     "typst.toml",
-    "data.typ",
+    "feather-icons-data.typ",
 ]
 
 with open(ROOT / "typst.toml", 'rb') as f:

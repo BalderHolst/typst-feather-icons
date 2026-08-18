@@ -1,4 +1,4 @@
-#import "data.typ"
+#import "feather-icons-data.typ" as data
 
 /// Version of the icons (not the package)
 /// -> str
