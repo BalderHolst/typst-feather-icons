@@ -27,7 +27,9 @@ After installation it will be available with:
 ```typst
 #import "@!{
     typst eval 'toml("typst.toml").tool.install.namespace' | jq . -r
-}/feather-icons:!{
+}/!{
+    typst eval 'toml("typst.toml").package.name' | jq . -r
+}:!{
     typst eval 'query(<package-metadata>).first().value' --in docs.typ | jq .version -r
 }"
 ```
