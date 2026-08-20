@@ -6,6 +6,7 @@ import tomllib
 import shutil
 import argparse
 import subprocess
+import sys
 
 import txtx
 
@@ -13,7 +14,6 @@ ROOT = Path(__file__).parent
 DATA_DIR = Path("~/.local/share").expanduser()
 
 FILES = [
-    "README.md",
     "LICENSE",
     "lib.typ",
     "typst.toml",
@@ -35,50 +35,97 @@ LOCAL_PKGS_DIR = DATA_DIR / "typst/packages"
 def package_dir(pkgs_dir: Path, namespace: str, name: str, version: str):
     return pkgs_dir / namespace / name / version
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-f', '--force', action="store_true", help="Override existing package")
-parser.add_argument('-s', '--symlink', action="store_true", help="Install package with symlink")
-parser.add_argument('-n', '--namespace', type=str, default=DEFAULT_NAMESPACE, help="Namespace to install to")
-parser.add_argument('-p', '--pkgs-dir', type=Path, default=LOCAL_PKGS_DIR, help="Package index directory")
-
-args = parser.parse_args()
-
-pkgs_dir = args.pkgs_dir
-namespace = args.namespace
-
-dst_dir = package_dir(pkgs_dir, namespace, NAME, VERSION)
-
-print(f"ROOT : {ROOT}")
-print(f"DST  : {dst_dir}")
-
 def error(msg):
     print()
     print(msg)
     exit(1)
 
-if args.force:
+def create_readme(dir: Path, namespace: str):
+    res = subprocess.run(
+        ["python3", "txtx.py", "README.mdx"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        env={
+            "PATH": os.environ['PATH'],
+            "EXAMPLE_SVG_URL": "./example.svg",
+            "DOCS_URL": "./docs.pdf",
+            "NAMESPACE": namespace,
+        }
+    )
+    file = dir / "README.md"
+    file.write_bytes(res.stdout)
+
+def create_docs(dir: Path, namespace: str):
+    dst = dir / "docs.pdf"
+    subprocess.run(
+        ["typst", "compile", "docs.typ", "--input", f"namespace={namespace}", dst],
+        cwd=ROOT,
+        check=True,
+    )
+
+def create_example_svg(dir: Path, namespace: str):
+
+    # Import script to get example source code
+    sys.path.append("./docs/")
+    import extract_example
+    code = extract_example.extract_code(namespace=namespace)
+
+    dst = dir / "example.svg"
+
+    subprocess.run(
+        ["typst", "compile", "-", dst],
+        input=code.encode(),
+        cwd=ROOT,
+        check=True,
+    )
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--force', action="store_true", help="Override existing package")
+    parser.add_argument('-s', '--symlink', action="store_true", help="Install package with symlink")
+    parser.add_argument('-n', '--namespace', type=str, default=DEFAULT_NAMESPACE, help="Namespace to install to")
+    parser.add_argument('-p', '--pkgs-dir', type=Path, default=LOCAL_PKGS_DIR, help="Package index directory")
+
+    args = parser.parse_args()
+
+    pkgs_dir = args.pkgs_dir
+    namespace = args.namespace
+
+    dst_dir = package_dir(pkgs_dir, namespace, NAME, VERSION)
+
+    print(f"ROOT : {ROOT}")
+    print(f"DST  : {dst_dir}")
+
+    if args.force:
+        if dst_dir.exists():
+            if os.path.islink(dst_dir):
+                os.remove(dst_dir)
+            else:
+                shutil.rmtree(dst_dir)
+
     if dst_dir.exists():
-        if os.path.islink(dst_dir):
-            os.remove(dst_dir)
-        else:
-            shutil.rmtree(dst_dir)
+        error(f"Destination '{dst_dir}' already exists. Delete it or use the `-f` flag to override.")
 
-if dst_dir.exists():
-    error(f"Destination '{dst_dir}' already exists. Delete it or use the `-f` flag to override.")
+    if args.symlink:
+        subprocess.run(["ln", "-s", ROOT, dst_dir])
+        exit(0)
 
-if args.symlink:
-    subprocess.run(["ln", "-s", ROOT, dst_dir])
-    exit(0)
 
-for path in FILES:
-    src = ROOT / path
-    dst = dst_dir / path
-    os.makedirs(dst.parent, exist_ok=True)
+    for path in FILES:
+        src = ROOT / path
+        dst = dst_dir / path
+        os.makedirs(dst.parent, exist_ok=True)
 
-    if os.path.isfile(src):
-        shutil.copy(src, dst)
-    if os.path.isdir(src):
-        shutil.copytree(src, dst)
+        if os.path.isfile(src):
+            shutil.copy(src, dst)
+        if os.path.isdir(src):
+            shutil.copytree(src, dst)
 
-if namespace != DEFAULT_NAMESPACE:
-    print("[WARN]: Make sure to change the README to reflect the new namespace.")
+    create_example_svg(dst_dir, namespace)
+    create_readme(dst_dir, namespace)
+    create_docs(dst_dir, namespace)
+
+if __name__ == "__main__":
+    main()

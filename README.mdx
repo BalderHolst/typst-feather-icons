@@ -2,18 +2,18 @@
 This is a simple Typst package for using [Feather Icons](https://feathericons.com/) in your Typst documents.
 
 ## Documentation
-API Documentation and more examples can be found in the [documentation PDF](https://balderholst.github.io/typst-feather-icons/).
+API Documentation and more examples can be found in the [documentation PDF](!{echo $DOCS_URL}).
 
 ## Example
 
 ```typst
 !{
-    typst eval 'query(<example-code>).first().value' --in docs.typ | jq . -r
+    typst eval 'query(<example-code>).first().value' --in docs.typ --input namespace=$NAMESPACE | jq . -r
 }
 ```
 
 *Output:*
-![Output svg](https://balderholst.github.io/typst-feather-icons/example.svg)
+![Output svg](!{echo $EXAMPLE_SVG_URL})
 
 ## Local Installation
 You can use the included installer to install this package locally on Linux.

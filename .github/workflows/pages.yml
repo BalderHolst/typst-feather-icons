@@ -30,7 +30,7 @@ jobs:
         run: typst compile ./docs.typ
 
       - name: Build Example SVG
-        run: python docs/extract-example.py | typst c - example.svg
+        run: python docs/extract_example.py | typst c - example.svg
 
       - name: Make `public` directory
         run: |

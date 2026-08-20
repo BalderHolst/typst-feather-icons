@@ -80,8 +80,10 @@ This package contains Typst bindings for the open source #link("https://featheri
     layout: my-layout-example.with(input_file: "example.typ", output_file: "example.pdf"),
   )
 
+  #let namespace = sys.inputs.at("namespace", default: manifest.tool.install.namespace)
+
   #let example-code = {
-    "<<<#import \"@" + manifest.tool.install.namespace + "/" + package.name + ":" + package.version +"\": icons, inline-icons, make-icons
+    "<<<#import \"@" + namespace + "/" + package.name + ":" + package.version +"\": icons, inline-icons, make-icons
 
 Icon images are accessed with the exposed `icons` variable:
 #stack(dir: ltr, spacing: 7pt, icons.phone, icons.user, icons.github, icons.map-pin)
